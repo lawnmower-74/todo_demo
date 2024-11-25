@@ -2,9 +2,10 @@ version: "3.8"
 services:
   db:
     image: mysql:8.0.27
+    container_name: db_container
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todo_app
     ports:
       - 3307:3306
     volumes:
@@ -22,6 +23,17 @@ services:
       - db
     tty: true
     stdin_open: true
+
+  migrate:
+    build:
+      context: ./server/
+      dockerfile: Dockerfile
+    working_dir: /go/src/db/migrate
+    command: go run migrate.go
+    depends_on:
+      - db
+    volumes:
+      - ./server/.env:/go/src/db/migrate/.env
     
 volumes:
   mysql_data:

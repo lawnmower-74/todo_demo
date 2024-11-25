@@ -11,23 +11,21 @@ import (
 )
 
 func NewDB() *gorm.DB {
-	err := godotenv.Load("../../../.env")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatalln(err)
 	}
 	dns := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", 
+		"%s:%s@tcp(db_container)/%s?charset=utf8mb4&parseTime=True&loc=Local", 
 		os.Getenv("MYSQL_USER"),
 		os.Getenv("MYSQL_PASSWORD"), 
-		os.Getenv("MYSQL_HOST"),
-		os.Getenv("MYSQL_PORT"), 
 		os.Getenv("MYSQL_DATABASE"),
 	)
 	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("Connceted")
+	fmt.Println("DB Connected")
 	return db
 }
 

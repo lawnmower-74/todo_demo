@@ -7,4 +7,4 @@ RUN go mod download
 
 COPY . .
 
-CMD [ "go", "run", "server/main.go" ]
+CMD [ "go", "run", "main.go" ]
