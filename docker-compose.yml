@@ -23,6 +23,17 @@ services:
       - db
     tty: true
     stdin_open: true
+
+  client:
+    build:
+      context: ./client/
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/usr/src/app
+    ports:
+      - "3000:3000"
+    tty: true
+    stdin_open: true
     
 volumes:
   mysql_data:
