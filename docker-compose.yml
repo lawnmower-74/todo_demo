@@ -10,6 +10,8 @@ services:
       - 3307:3306
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - external_network
 
   server:
     build:
@@ -23,6 +25,8 @@ services:
       - db
     tty: true
     stdin_open: true
+    networks:
+      - external_network
 
   client:
     build:
@@ -34,6 +38,26 @@ services:
       - "3000:3000"
     tty: true
     stdin_open: true
+    networks:
+      - external_network
+  
+  playwright:
+    build: .
+    container_name: playwright
+    tty: true
+    ports:
+      - "9323:9323"
+      - "8010:8010"
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - DISPLAY=:10
+    networks:
+      - external_network
+
+networks:
+  external_network:
     
 volumes:
   mysql_data:
